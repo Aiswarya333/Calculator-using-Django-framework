@@ -1,0 +1,185 @@
+let num1 = '';
+let num2 = '';
+let operator = '';
+let total = '';
+$(document).ready(function() {
+    $('button').on('click', function(e) {
+        let btn = e.target.innerHTML;
+        if (btn >= '0' && btn <= '9') {
+            handleNumber(btn);
+        } else {
+            handleOperator(btn);
+        }
+    });
+});
+function handleNumber(num) {
+    if (num1 === '') {
+        num1 = num;
+    } else {
+        num2 = num;
+    }
+    displayButton(num);
+}
+function handleOperator(oper) {
+    if (operator === '') {
+        operator = oper;
+    } else {
+        handleTotal();
+        operator = oper;
+    }
+}
+function handleTotal() {
+    switch (operator) {
+        case '+':
+            total = +num1 + +num2;
+            displayButton(total);
+            break;
+        case '-':
+            total = +num1 - +num2;
+            displayButton(total);
+            break;
+        case '/':
+            total = +num1 / +num2;
+            displayButton(total);
+            break;
+        case 'X':
+            total = +num1 * +num2;
+            displayButton(total);
+            break;
+    }
+    updateVariables();
+}
+function displayButton(btn) {
+    $('.calc-result-input').text(btn);
+}
+function updateVariables() {
+    num1 = total;
+    num2 = '';
+}
+
+
+
+
+
+index.html
+
+
+
+<!-- {% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Django Calculator{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  
+
+    {% block stylesheet %}{% endblock %}  <!-- HERE -->
+</head>
+<body>
+
+<div class="topheader">
+    <h1>Django Calculator</h1>
+</div>
+<div class="row mtop50">
+    <div class="col-lg-5 col-md-5 col-sm-5 pad60">
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5 ">
+        <div class="">
+            <input type="text" id="result" name="result"/>
+        </div>
+        
+        <div>
+            <input type="submit" class="calcbtn" value="7" id="7" name="7"/>
+            <input type="submit" class="calcbtn" value="8" id="8" name="8"/>
+            <input type="submit" class="calcbtn" value="9" id="9" name="9"/>
+        </div>
+        <div>
+            <input type="submit" class="calcbtn" value="4" id="4" name="4"/>
+            <input type="submit" class="calcbtn" value="5" id="5" name="5"/>
+            <input type="submit" class="calcbtn" value="6" id="6" name="6"/>
+        </div>
+        <div>
+            <input type="submit" class="calcbtn" value="1" id="1" name="1"/>
+            <input type="submit" class="calcbtn" value="2" id="2" name="2"/>
+            <input type="submit" class="calcbtn" value="3" id="3" name="3"/>
+
+        </div>
+        <div>
+            <input type="submit" class="calcbtn" value="0" id="0" name="0"/>
+        </div>
+        <div>
+            <input type="submit" class="calcbtn" value="-" id="sub" name="-"/>
+            <input type="submit" class="calcbtn" value="+" id="sum" name="+"/>
+            <input type="submit" class="calcbtn" value="/" id="div" name="/"/>
+            <input type="submit" class="calcbtn" value="*" id="mul" name="*"/>
+        </div>
+        <div>
+            <input type="submit" class="calcbtn" value="=" id="equal" name="="/>
+        </div>
+    </div>
+</div>
+ <!-- jQuery -->
+ <script src="../vendors/jquery/dist/jquery.min.js"></script>
+ <!-- Bootstrap -->
+ <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+ <!-- FastClick -->
+ <script src="../vendors/fastclick/lib/fastclick.js"></script>
+ <!-- NProgress -->
+ <script src="../vendors/nprogress/nprogress.js"></script>
+ <!-- iCheck -->
+ <script src="../vendors/iCheck/icheck.min.js"></script>
+
+ <!-- Custom Theme Scripts -->
+ <script src="../build/js/custom.min.js"></script>
+
+</body>
+</html>
+
+<script>
+    $('.calcbtn').on('click', function() {
+
+
+
+
+
+</script> -->
+
+
+
+
+
+
+views.py
+
+
+
+
+def calc_op(request):
+    if request.method == 'GET':
+
+        arr1 = request.GET.getlist('arr1[]')
+        print(arr1)
+        arr2 = request.GET.getlist('arr2[]')
+        # pdb.set_trace()
+        print ("**get**")
+        arr_len = len(arr1)
+        data = int(arr1[0])
+        for i in range(arr_len - 1):
+            if (arr2[i] == '+'):
+                qt = arr2[i]
+                data = int(arr1[i + 1]) + data
+                # pdb.set_trace()
+            elif (arr2[i] == '-'):
+                data = data - int(arr1[i + 1])
+            elif (arr2[i] == '*'):
+                data = data * int(arr1[i + 1])
+            elif (arr2[i] == '/'):
+                data = data / int(arr1[i + 1])
+            elif (arr2[i] == 'log'):
+                data = math.log(int(arr1[i + 1]), data)
+        data = json.dumps(data)
+
+        return HttpResponse(data, content_type="application/json")
